@@ -33,26 +33,18 @@ export default async function handler(req: any, res: any) {
       // Split the string into chunks of 2000 characters (Discord's character limit)
       const chunks = webhookDataString.match(/[\s\S]{1,2000}/g) || [];
 
-      // Counter for transactions
-      let transactionCounter = 0;
-
       // Send each chunk as a separate message
       for (const chunk of chunks) {
-        const contentWithCounter = `${chunk}\n\n**Transaction Counter:** ${transactionCounter}`;
-
         const response = await fetch(webhook, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            content: contentWithCounter,
+            content: chunk,
           }),
         });
       }
-
-      // Increment transaction counter for every webhook
-      transactionCounter++;
     }
   } catch (err) {
     console.log(err);
